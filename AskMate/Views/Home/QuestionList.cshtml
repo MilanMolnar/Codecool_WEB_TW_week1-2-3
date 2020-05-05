@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "QuestionList";
+}
+@model List<AskMate.Models.QuestionModel>
+
+@if (Model.Count != 0)
+{
+
+    
+  
+
+    <div class="SortButtons" style="background-color:#c6e2ff; border-radius:7px;margin-right:30px; padding-left:20px; height:40px; padding-top:4px; font-size:17px; margin-bottom:20px">
+        <div style="float:left; margin-left:30px; margin-top:1px; padding-left:5px;padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a href='@Url.Action("SortingByTitleDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByTitleAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Title
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByLikesDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Like
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByCommentsAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByLikesAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Comment
+        </div>
+        <div style="float:left; margin-left:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByDateDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByDateAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Date
+        </div>
+        <div style="float:left; margin-left:15px; margin-right:15px; margin-top:1px; padding-right:5px;border-radius:5px; background-color:#f5faff">
+            <a style="margin-left:5px" href='@Url.Action("SortingByViewsDesc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Downvote.png")' />
+            </a>
+
+            <a href='@Url.Action("SortingByViewsAsc", new { Model })'>
+                <img style="height:13px; width:7px; " src='@Url.Content("~/Upvote.png")' />
+            </a>
+            Views
+        </div>
+        <div style="margin-left:20px">
+            @using (Html.BeginForm("Search", "Home", FormMethod.Get))
+            {
+                @Html.TextBox("search")
+                <input type="submit" value="Search" />
+            }
+        </div>
+    </div>
+
+
+    <ul style="list-style-type: none ; margin-right:30px">
+
+        @foreach (var q in Model)
+        {
+            <div style="background-color:#e0efff; margin-top:10px; border-radius:7px;padding-left:5px;padding-right:5px;padding-bottom:2px">
+                <li>
+                    <div style="font-size:26px; background-color:#c8e2ff;border-radius:7px;padding-left:3px;padding-right:3px; height:39px">
+                        <h2 style="float:none">@q.Title</h2>
+                    </div>
+                    @if (q.Text.Length >= 150)
+                    {
+                        <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@q.Text.Substring(0, 150)...</h3>
+                    }
+                    else
+                    {
+                        <h3 style="max-width:1000px; float:none;font-size:20px;word-wrap:break-word">@q.Text</h3>
+                    }
+                    <div style="float:left; margin-right:1%;margin-bottom:2px">
+
+                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("View", new { id = q.ID })'>
+                            <img style="height:18px; width:15px; " src='@Url.Content("~/view.png")' />
+                        </a>
+                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("QuestionEdit", new { id = q.ID })'>
+                            <img style="height:15px; width:15px; " src='@Url.Content("~/edit.png")' />
+                        </a>
+                        <a style="margin-left:0px;margin-bottom:2px" href='@Url.Action("Delete", new { id = q.ID })'>
+                            <img style="height:15px; width:15px; " src='@Url.Content("~/delete.png")' />
+                        </a>
+                    </div>
+                    <h3 style="font-size:15px; margin-top:1.13%"><img style="margin-left:0%; padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/upvote.png")' />@q.Like <img style="padding-bottom:2px;height:16px; width:8px; " src='@Url.Content("~/downvote.png")' />@q.Dislike<img style="float:none; margin-left:2%; height:16px; width:16px;padding-bottom:2px;" src='@Url.Content("~/clicks.png")' /> @q.NumOfViews <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/comment.png")' />@q.MessageNumber <img style="padding-bottom:2px;float:none; margin-left:2%; height:16px; width:16px; " src='@Url.Content("~/date.png")' /> @q.PostedDate </h3>
+
+                </li>
+            </div>
+        }
+    </ul>
+}
+else
+{
+    <div>
+        <p style="font-size:150px; margin-left:70px;float:left "> :(<p style="padding-top:170px; margin-left:11px">There are no questions yet...     </p></p>
+    </div>
+    <div style="float:none; margin-top:45%">
+        <a asp-action="QuestionAsking">Ask a question</a> |
+        <a asp-action="Index">Back to Home</a>
+    </div>
+}
+<ul class="circles" style="pointer-events:none;  ">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+
+
